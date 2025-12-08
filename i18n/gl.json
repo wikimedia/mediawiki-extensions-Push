@@ -47,7 +47,7 @@
 	"push-remote-pages": "Páxinas remotas",
 	"push-remote-page-link": "«$1» en $2",
 	"push-remote-page-link-full": "Ollar «$1» en $2",
-	"push-targets-total": "Hai un total de $1 {{PLURAL:$1|destino|destinos}}.",
+	"push-targets-total": "Hai un total {{PLURAL:$1|dun destino|de $1 destinos}}.",
 	"push-button-all": "Empurrar todas",
 	"push-tab-last-edit": "Última edición feita por $1 o $2 ás $3.",
 	"push-tab-not-created": "Esta páxina aínda non existe.",
