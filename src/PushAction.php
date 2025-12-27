@@ -273,7 +273,7 @@ class PushAction extends Action {
 			Html::rawElement(
 				'div',
 				[ 'id' => 'divIncTemplates', 'style' => 'display: table-row' ],
-				Xml::check( 'checkIncTemplates', $pushIncTemplates, [ 'id' => 'checkIncTemplates' ] ) .
+				Html::check( 'checkIncTemplates', $pushIncTemplates, [ 'id' => 'checkIncTemplates' ] ) .
 				Html::element(
 					'label',
 					[ 'id' => 'lblIncTemplates', 'for' => 'checkIncTemplates' ],
@@ -332,7 +332,7 @@ class PushAction extends Action {
 			Html::rawElement(
 				'div',
 				[ 'id' => 'divIncFiles', 'style' => 'display: table-row' ],
-				Xml::check( 'checkIncFiles', $pushIncFiles, [ 'id' => 'checkIncFiles' ] ) .
+				Html::check( 'checkIncFiles', $pushIncFiles, [ 'id' => 'checkIncFiles' ] ) .
 				Html::element(
 					'label',
 					[ 'id' => 'lblIncFiles', 'for' => 'checkIncFiles' ],
