@@ -228,13 +228,16 @@ class SpecialPush extends SpecialPage {
 				'action' => $this->getPageTitle()->getLocalURL( 'action=submit' )
 			]
 		);
-		$form .= Xml::inputLabel(
+		$form .= Html::label(
 			$this->msg( 'export-addcattext' )->text(),
+			'catname'
+		) . "\u{00A0}" . Html::input(
 			'catname',
-			'catname',
-			40
-			) . '&#160;';
-		$form .= Xml::submitButton(
+			'',
+			'text',
+			[ 'id' => 'catname', 'size' => 40 ]
+		) . '&#160;';
+		$form .= Html::submitButton(
 			$this->msg( 'export-addcat' )->text(),
 			[ 'name' => 'addcat' ]
 			) . '<br />';
@@ -248,7 +251,7 @@ class SpecialPush extends SpecialPage {
 			'id' => 'namespace',
 			'class' => 'namespaceselector',
 		] ) . '&#160;';
-		$form .= Xml::submitButton(
+		$form .= Html::submitButton(
 			$this->msg( 'export-addns' )->text(),
 			[ 'name' => 'addns' ]
 			) . '<br />';
@@ -261,19 +264,20 @@ class SpecialPush extends SpecialPage {
 		);
 		$form .= '<br />';
 
-		$form .= Xml::checkLabel(
-			$this->msg( 'export-templates' )->text(),
+		$form .= Html::check(
 			'templates',
-			'wpPushTemplates',
-			$req->wasPosted() ? $req->getCheck( 'templates' ) : $egPushIncTemplates
-		) . '<br />';
+			$req->wasPosted() ? $req->getCheck( 'templates' ) : $egPushIncTemplates,
+			[ 'id' => 'wpPushTemplates' ]
+		) . "\u{00A0}" . Html::label( $this->msg( 'export-templates' )->text(), 'wpPushTemplates' ) . '<br />';
 
 		if ( $this->getUser()->isAllowed( 'filepush' ) ) {
-			$form .= Xml::checkLabel(
-				$this->msg( 'push-special-inc-files' )->text(),
+			$form .= Html::check(
 				'files',
-				'wpPushFiles',
-				$req->wasPosted() ? $req->getCheck( 'files' ) : $egPushIncFiles
+				$req->wasPosted() ? $req->getCheck( 'files' ) : $egPushIncFiles,
+				[ 'id' => 'wpPushFiles' ]
+			) . "\u{00A0}" . Html::label(
+				$this->msg( 'push-special-inc-files' )->text(),
+				'wpPushFiles'
 			) . '<br />';
 		}
 
@@ -286,11 +290,12 @@ class SpecialPush extends SpecialPage {
 			foreach ( $egPushTargets as $targetName => $targetUrl ) {
 				$checkName = str_replace( ' ', '_', $targetName );
 				$checked = $req->wasPosted() ? $req->getCheck( $checkName ) : true;
-				$form .= Xml::checkLabel( $targetName, $checkName, $targetName, $checked ) . '<br />';
+				$form .= Html::check( $checkName, $checked, [ 'id' => $targetName ] )
+					. "\u{00A0}" . Html::label( $targetName, $targetName ) . '<br />';
 			}
 		}
 
-		$form .= Xml::submitButton(
+		$form .= Html::submitButton(
 			$this->msg( 'push-special-button-text' )->text(),
 			[ 'style' => 'width: 125px; height: 30px' ]
 		);
