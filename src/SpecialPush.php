@@ -222,7 +222,7 @@ class SpecialPush extends SpecialPage {
 
 		$this->getOutput()->addWikiMsg( 'push-special-description' );
 
-		$form = Xml::openElement( 'form',
+		$form = Html::openElement( 'form',
 			[
 				'method' => 'post',
 				'action' => $this->getPageTitle()->getLocalURL( 'action=submit' )
@@ -256,11 +256,10 @@ class SpecialPush extends SpecialPage {
 			[ 'name' => 'addns' ]
 			) . '<br />';
 
-		$form .= Xml::element(
+		$form .= Html::element(
 			'textarea',
 			[ 'name' => 'pages', 'cols' => 40, 'rows' => 10 ],
-			$pages,
-			false
+			$pages
 		);
 		$form .= '<br />';
 
@@ -299,7 +298,7 @@ class SpecialPush extends SpecialPage {
 			$this->msg( 'push-special-button-text' )->text(),
 			[ 'style' => 'width: 125px; height: 30px' ]
 		);
-		$form .= Xml::closeElement( 'form' );
+		$form .= Html::closeElement( 'form' );
 
 		$this->getOutput()->addHTML( $form );
 	}
