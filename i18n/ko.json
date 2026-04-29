@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Tensama0415",
 			"Ykhwong",
 			"아라"
 		]
@@ -12,6 +13,8 @@
 	"right-bulkpush": "대량 밀기 기능(즉 특수:밀기)를 사용하기",
 	"action-pushadmin": "밀기 구성",
 	"right-pushadmin": "밀기 대상과 밀기 설정 수정하기",
+	"action-filepush": "다른 위키로 파일을 밀어넣을",
+	"right-filepush": "다른 위키로 파일을 밀어넣음",
 	"group-pusher": "미는자",
 	"group-pusher-member": "{{GENDER:$1|미는자}}",
 	"grouppage-pusher": "{{ns:project}}:미는자",
@@ -82,5 +85,13 @@
 	"push-special-pushing-file": "$1: $2 파일을 미는 중...",
 	"push-special-return": "더 많은 문서 밀기",
 	"push-api-err-nocurl": "cURL를 설치하지 않았습니다.\n공개 위키에서 $egPushDirectFileUploads를 false로 설정하거나 비공개 위키에 cURL을 설치하세요",
-	"push-api-err-nofilesupport": "로컬 미디어위키에 파일을 게시하는 데에 지원이 없습니다.\n공개 위키의 경우 $egPushDirectFileUploads를 false로 설정하세요.\n비공개 위키의 경우 밀기 설명서 또는 미디어위키 자체에서 업데이트하여 링크한 패치를 적용하세요."
+	"push-api-err-nofilesupport": "로컬 미디어위키에 파일을 게시하는 데에 지원이 없습니다.\n공개 위키의 경우 $egPushDirectFileUploads를 false로 설정하세요.\n비공개 위키의 경우 밀기 설명서 또는 미디어위키 자체에서 업데이트하여 링크한 패치를 적용하세요.",
+	"apihelp-push-summary": "하나 이상의 페이지 콘텐츠를 하나 이상의 대상 위키로 밀어넣습니다.",
+	"apihelp-push-param-page": "밀어넣을 문서의 이름입니다.",
+	"apihelp-push-param-targets": "밀어넣을 위키의 URL입니다.",
+	"apihelp-push-example": "'Main page' 문서를 영어 위키백과에 밀어넣습니다.",
+	"apihelp-pushimages-summary": "하나 이상의 페이지 콘텐츠를 하나 이상의 대상 위키로 밀어넣습니다.",
+	"apihelp-pushimages-param-images": "밀어넣을 이미지의 이름입니다.",
+	"apihelp-pushimages-param-targets": "밀어넣을 위키의 URL입니다.",
+	"apihelp-pushimages-example": "'Foo.bar' 파일을 영어 위키백과에 밀어넣습니다."
 }
