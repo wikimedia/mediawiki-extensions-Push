@@ -23,7 +23,12 @@ class SpecialPush extends SpecialPage {
 	 * @since 0.1
 	 */
 	public function __construct() {
-		parent::__construct( 'Push', 'bulkpush' );
+		parent::__construct( 'Push' );
+	}
+
+	/** @inheritDoc */
+	public function getRestriction(): string {
+		return 'bulkpush';
 	}
 
 	/**
