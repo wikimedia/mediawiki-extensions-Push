@@ -48,7 +48,13 @@
 		}
 	},
 	"SpecialPages": {
-		"Push": "SpecialPush"
+		"Push": {
+			"class": "SpecialPush",
+			"services": [
+				"ConnectionProvider",
+				"ContentLanguage"
+			]
+		}
 	},
 	"MessagesDirs": {
 		"Push": [

@@ -1,8 +1,9 @@
 <?php
 
 use MediaWiki\Html\Html;
-use MediaWiki\MediaWikiServices;
+use MediaWiki\Language\Language;
 use MediaWiki\Title\Title;
+use Wikimedia\Rdbms\IConnectionProvider;
 
 /**
  * A special page that allows pushing one or more pages to one or more targets.
@@ -22,7 +23,10 @@ class SpecialPush extends SpecialPage {
 	 *
 	 * @since 0.1
 	 */
-	public function __construct() {
+	public function __construct(
+		private readonly IConnectionProvider $dbProvider,
+		private readonly Language $contentLanguage,
+	) {
 		parent::__construct( 'Push' );
 	}
 
@@ -320,7 +324,7 @@ class SpecialPush extends SpecialPage {
 	protected function getPagesFromCategory( Title $title ) {
 		$name = $title->getDBkey();
 
-		$dbr = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_REPLICA );
+		$dbr = $this->dbProvider->getReplicaDatabase();
 		$res = $dbr->select(
 			[ 'page', 'categorylinks' ],
 			[ 'page_namespace', 'page_title' ],
@@ -330,12 +334,10 @@ class SpecialPush extends SpecialPage {
 		);
 
 		$pages = [];
-		$contentLanguage = MediaWikiServices::getInstance()->getContentLanguage();
-
 		foreach ( $res as $row ) {
 			$n = $row->page_title;
 			if ( $row->page_namespace ) {
-				$ns = $contentLanguage->getNsText( $row->page_namespace );
+				$ns = $this->contentLanguage->getNsText( $row->page_namespace );
 				$n = $ns . ':' . $n;
 			}
 
@@ -354,7 +356,7 @@ class SpecialPush extends SpecialPage {
 	 * @return array
 	 */
 	protected function getPagesFromNamespace( $nsindex ) {
-		$dbr = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_REPLICA );
+		$dbr = $this->dbProvider->getReplicaDatabase();
 		$res = $dbr->select(
 			'page',
 			[ 'page_namespace', 'page_title' ],
@@ -364,13 +366,12 @@ class SpecialPush extends SpecialPage {
 		);
 
 		$pages = [];
-		$contentLanguage = MediaWikiServices::getInstance()->getContentLanguage();
 
 		foreach ( $res as $row ) {
 			$n = $row->page_title;
 
 			if ( $row->page_namespace ) {
-				$ns = $contentLanguage->getNsText( $row->page_namespace );
+				$ns = $this->contentLanguage->getNsText( $row->page_namespace );
 				$n = $ns . ':' . $n;
 			}
 
