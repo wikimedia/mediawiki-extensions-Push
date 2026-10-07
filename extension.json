@@ -12,8 +12,20 @@
 		"MediaWiki": ">= 1.46.0"
 	},
 	"APIModules": {
-		"push": "ApiPush",
-		"pushimages": "ApiPushImages"
+		"push": {
+			"class": "ApiPush",
+			"services": [
+				"HookContainer",
+				"HttpRequestFactory"
+			]
+		},
+		"pushimages": {
+			"class": "ApiPushImages",
+			"services": [
+				"HookContainer",
+				"HttpRequestFactory"
+			]
+		}
 	},
 	"Actions": {
 		"push": "PushAction"

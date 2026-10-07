@@ -1,7 +1,9 @@
 <?php
 
+use MediaWiki\Api\ApiMain;
 use MediaWiki\Config\GlobalVarConfig;
-use MediaWiki\MediaWikiServices;
+use MediaWiki\HookContainer\HookContainer;
+use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Title\Title;
 
 /**
@@ -16,8 +18,13 @@ use MediaWiki\Title\Title;
  */
 class ApiPushImages extends ApiPushBase {
 
-	public function __construct( $main, $action ) {
-		parent::__construct( $main, $action );
+	public function __construct(
+		ApiMain $main,
+		string $action,
+		private readonly HookContainer $hookContainer,
+		private readonly HttpRequestFactory $httpRequestFactory,
+	) {
+		parent::__construct( $main, $action, $httpRequestFactory );
 	}
 
 	/**
@@ -43,14 +50,13 @@ class ApiPushImages extends ApiPushBase {
 	 * @param array $targets
 	 */
 	protected function doPush( Title $title, array $targets ) {
-		$hookContainer = MediaWikiServices::getInstance()->getHookContainer();
 		foreach ( $targets as $target ) {
 			$token = $this->getToken( $target, 'csrf' );
 
 			if ( $token !== false ) {
 				$doPush = true;
 
-				$hookContainer->run( 'PushAPIBeforeImagePush', [ &$title, &$target, &$token, &$doPush ] );
+				$this->hookContainer->run( 'PushAPIBeforeImagePush', [ &$title, &$target, &$token, &$doPush ] );
 
 				if ( $doPush ) {
 					$this->pushToTarget( $title, $target, $token );
@@ -120,11 +126,11 @@ class ApiPushImages extends ApiPushBase {
 					'image-push-nofilesupport'
 				);
 			} else {
-				$req = MediaWikiServices::getInstance()->getHttpRequestFactory()
+				$req = $this->httpRequestFactory
 					->create( $target, $reqArgs, __METHOD__ );
 			}
 		} else {
-			$req = MediaWikiServices::getInstance()->getHttpRequestFactory()
+			$req = $this->httpRequestFactory
 				->create( $target, $reqArgs, __METHOD__ );
 		}
 
@@ -145,7 +151,7 @@ class ApiPushImages extends ApiPushBase {
 				FormatJson::decode( $response )
 			);
 
-			MediaWikiServices::getInstance()->getHookContainer()
+			$this->hookContainer
 				->run( 'PushAPIAfterImagePush', [ $title, $target, $token, $response ] );
 		} else {
 			$this->dieWithError( wfMessage( 'push-special-err-push-failed' )->text(), 'page-push-failed' );

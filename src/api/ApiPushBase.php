@@ -1,7 +1,8 @@
 <?php
 
+use MediaWiki\Api\ApiMain;
 use MediaWiki\Config\GlobalVarConfig;
-use MediaWiki\MediaWikiServices;
+use MediaWiki\Http\HttpRequestFactory;
 
 abstract class ApiPushBase extends ApiBase {
 	/**
@@ -13,6 +14,14 @@ abstract class ApiPushBase extends ApiBase {
 	 * @var array
 	 */
 	protected $cookieJars = [];
+
+	public function __construct(
+		ApiMain $main,
+		string $action,
+		private readonly HttpRequestFactory $httpRequestFactory,
+	) {
+		parent::__construct( $main, $action );
+	}
 
 	/** @inheritDoc */
 	public function needsToken() {
@@ -52,7 +61,7 @@ abstract class ApiPushBase extends ApiBase {
 			$requestData['lgtoken'] = $token;
 		}
 
-		$req = MediaWikiServices::getInstance()->getHttpRequestFactory()->create( $target,
+		$req = $this->httpRequestFactory->create( $target,
 			[
 				'postData' => $requestData,
 				'method' => 'POST',
@@ -129,7 +138,7 @@ abstract class ApiPushBase extends ApiBase {
 			'type' => $type,
 		];
 
-		$req = MediaWikiServices::getInstance()->getHttpRequestFactory()->create(
+		$req = $this->httpRequestFactory->create(
 			wfAppendQuery( $target, $requestData ),
 			[
 				'method' => 'GET',

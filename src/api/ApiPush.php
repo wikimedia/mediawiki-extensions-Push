@@ -1,7 +1,9 @@
 <?php
 
+use MediaWiki\Api\ApiMain;
 use MediaWiki\Config\GlobalVarConfig;
-use MediaWiki\MediaWikiServices;
+use MediaWiki\HookContainer\HookContainer;
+use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Request\FauxRequest;
 use MediaWiki\Title\Title;
 
@@ -22,8 +24,13 @@ class ApiPush extends ApiPushBase {
 	 */
 	protected $editResponses = [];
 
-	public function __construct( $main, $action ) {
-		parent::__construct( $main, $action );
+	public function __construct(
+		ApiMain $main,
+		string $action,
+		private readonly HookContainer $hookContainer,
+		private readonly HttpRequestFactory $httpRequestFactory,
+	) {
+		parent::__construct( $main, $action, $httpRequestFactory );
 	}
 
 	/**
@@ -122,14 +129,13 @@ class ApiPush extends ApiPushBase {
 	 * @param array $targets
 	 */
 	protected function doPush( Title $title, array $revision, array $targets ) {
-		$hookContainer = MediaWikiServices::getInstance()->getHookContainer();
 		foreach ( $targets as $target ) {
 			$token = $this->getToken( $target, 'csrf' );
 
 			if ( $token !== false ) {
 				$doPush = true;
 
-				$hookContainer->run( 'PushAPIBeforePush', [ &$title, &$revision, &$target, &$token, &$doPush ] );
+				$this->hookContainer->run( 'PushAPIBeforePush', [ &$title, &$revision, &$target, &$token, &$doPush ] );
 
 				if ( $doPush ) {
 					$this->pushToTarget( $title, $revision, $target, $token );
@@ -168,7 +174,7 @@ class ApiPush extends ApiPushBase {
 			'token' => $token,
 		];
 
-		$req = MediaWikiServices::getInstance()->getHttpRequestFactory()->create( $target,
+		$req = $this->httpRequestFactory->create( $target,
 			[
 				'method' => 'POST',
 				'timeout' => 'default',
@@ -188,7 +194,7 @@ class ApiPush extends ApiPushBase {
 		if ( $status->isOK() ) {
 			$response = $req->getContent();
 			$this->editResponses[] = $response;
-			MediaWikiServices::getInstance()->getHookContainer()
+			$this->hookContainer
 				->run( 'PushAPIAfterPush', [ $title, $revision, $target, $token, $response ] );
 		} else {
 			$this->dieWithError( wfMessage( 'push-special-err-push-failed' )->text(), 'page-push-failed' );
