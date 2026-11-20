@@ -4,7 +4,8 @@
 			"Armin1392",
 			"Beginneruser",
 			"Ebrahim",
-			"Ebraminio"
+			"Ebraminio",
+			"LProfo"
 		]
 	},
 	"push-desc": "فرمت سبک وزن برای فشار محتوا به ویکی‌های دیگر",
@@ -28,7 +29,7 @@
 	"push-err-authentication": "اصالت‌سنجی در $1 شکست خورد. $2",
 	"push-tab-text": "فشار",
 	"push-button-text": "فشار",
-	"push-tab-desc": "این تب به شما برای تحت فشار فرار دادن نسخهٔ فعلی این صفحه به یک یا چند ویکی دیگر اجازه می‌دهد.",
+	"push-tab-desc": "این زبانه به شما برای فشردن نسخهٔ کنونی این صفحه به یک یا چند ویکی دیگر اجازه می‌دهد.",
 	"push-button-pushing": "فشار دادن",
 	"push-button-pushing-files": "فشار دادن پوشه‌ها",
 	"push-button-completed": "فشار کامل شد",
